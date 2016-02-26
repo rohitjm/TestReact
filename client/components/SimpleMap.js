@@ -3,11 +3,19 @@ import ReactDOM from 'react-dom';
 import {Gmaps, Marker, InfoWindow, Circle} from 'react-gmaps';
 
 const coords = {
-  lat: 51.5258541,
-  lng: -0.08040660000006028
+  lat: 37.78,
+  lng: -122.41
 };
 
 const SimpleMap = React.createClass({
+
+// constructor(props){
+//   super(props);
+// }
+//
+// var newCoords = this.props.coordinates;
+//console.log("Inside SimpleMap", this.props.coordinates);
+
 
   onMapCreated(map) {
     map.setOptions({
@@ -28,34 +36,43 @@ const SimpleMap = React.createClass({
   },
 
   render() {
+    console.log("Inside SimpleMap", this.props.coordinates[0]);
+    var lat, long;
+    this.props.coordinates[0]?lat = this.props.coordinates[0].lat:lat = coords.lat;
+    this.props.coordinates[0]?long = this.props.coordinates[0].long:long = coords.long;
+
     return (
       <Gmaps
         width={'600px'}
         height={'600px'}
-        lat={coords.lat}
-        lng={coords.lng}
+        lat={lat}
+        lng={long}
         zoom={12}
         loadingMessage={'Be happy'}
         params={{v: '3.exp'}}
         onMapCreated={this.onMapCreated}>
+
         <Marker
-          lat={coords.lat}
-          lng={coords.lng}
+          lat={lat}
+          lng={long}
           draggable={true}
           onDragEnd={this.onDragEnd} />
+
         <InfoWindow
-          lat={coords.lat}
-          lng={coords.lng}
+          lat={lat}
+          lng={long}
           content={'Hello, React :)'}
           onCloseClick={this.onCloseClick} />
+
         <Circle
-          lat={coords.lat}
-          lng={coords.lng}
+          lat={lat}
+          lng={long}
           radius={500}
           onClick={this.onClick} />
       </Gmaps>
     );
   }
+
 });
 
 export default SimpleMap;

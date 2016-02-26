@@ -7,12 +7,14 @@ import SimpleMap from './components/SimpleMap.js';
 
 
 class App extends React.Component{
+
   constructor(props){
     super(props);
     //Initialize top level component with empty arrays for the addressesList and placesList
     this.state = {
       placesList: [],
-      addressesList: []
+      addressesList: [],
+      coordinates:[]
     };
   }
 
@@ -34,18 +36,30 @@ class App extends React.Component{
     if(data.addressesList){
       this.setState({addressesList : data.addressesList});
     }
+
+    if(data.coordinates){
+      this.setState({coordinates : data.coordinates});
+    }
   }
 
+  // showMap(myCoords){
+  //   ReactDOM.render(<SimpleMap coordinates = {myCoords}>/, document.getElementById('map'));
+  // }
+
   render(){
+    console.log('rendering from index')
     return (
       <div>
-        <SearchBar addresses = {this.state.addressesList} setStates = {this.setStates.bind(this)}/>
+        <SearchBar coordinates = {this.state.coordinates} setStates = {this.setStates.bind(this)}/>
         <AddressList addresses = {this.state.addressesList} setState = {this.setStates.bind(this)} onRemove = {this.removeAddress.bind(this)}/>
-        <SimpleMap />
+        <SimpleMap coordinates = {this.state.coordinates}/>
       </div>
-    );
+    )
   }
 };
 
 //display the generated html on the DOM
 ReactDOM.render(<App />, document.querySelector('.container'));
+
+
+// <input type='button' value='Plot' onClick = {() => this.showMap(this.props.coordinates)}/>
