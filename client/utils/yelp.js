@@ -19,10 +19,10 @@ var yelp = new Yelp({
 });
 
 var searchYelp = function( keyword, latitude, longitude, callback ) {
-
+  console.log('Inside SearchYelp',latitude,longitude,keyword);
   yelp.search({ term: keyword, ll: latitude+','+ longitude})
   .then(function (data) {
-    //console.log(data);
+    console.log(data);
     if(callback){
       callback(data);
     }
@@ -30,7 +30,7 @@ var searchYelp = function( keyword, latitude, longitude, callback ) {
   .catch(function (err) {
     console.error('search Yelp Error: ', err);
 });
- 
+
 }
 
 // var getCenter = function( addresses ) {

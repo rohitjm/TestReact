@@ -12,9 +12,12 @@ class SearchBar extends React.Component {
   render() {
     return (
       <div>
-        <h4>latitude <input class='text' id='lat' type='text' name='latitude' placeholder='latitude' required/></h4>
-        <h4>longitude <input class='text' id='long' type='text' name='longitude' placeholder='longitude' required/></h4>
-        <input type='submit' value='Add' onClick = {() => this.addAddress(this.props.coordinates, this.props.setStates)}/>
+
+
+      <h4>What? <input class='text' id='term' type='text' name='term' placeholder='what you want to do...' required/></h4>
+      <h4>Who? <input class='text' id='address' type='text' name='address' placeholder='address...' required/></h4>
+      <input type='submit' value='Add' onClick = {() => this.addAddress(this.props.coordinates, this.props.setStates)}/>
+
 
         <br/><br/>
         <input type='submit' value='Search' onClick = {() => this.searchPlaces(null, this.props.setStates)}/>
@@ -24,14 +27,33 @@ class SearchBar extends React.Component {
 
   //Add an address to the address list
   addAddress = function (coordinates, callback) {
-    var lat = $('#lat').val();
-    var long = $('#long').val();
 
-    //var address = $('#address').val();
-    coordinates[0] = {long,lat};
-    console.log(coordinates);
-    callback({coordinates: coordinates});
-  }
+    //Convert address to long and lat coordinates
+    var myAddress = $('#address').val();
+    var lat, lng;
+    var geoCoder = new google.maps.Geocoder();
+    geoCoder.geocode({
+      address:myAddress
+      //address: "439 Mangels Ave, San Francisco, CA 94127",
+    }, function(response){
+      //console.log("Geocoder response: ", response);
+      lat = response[0].geometry.location.lat();
+      lng = response[0].geometry.location.lng();
+      console.log("from geocodes: ",lat,lng);
+      coordinates[0] = {lng,lat};
+      callback({coordinates: coordinates});
+    });
+
+
+    //#########################################
+    // var lat = $('#lat').val();
+    // var long = $('#long').val();
+    //
+    // coordinates[0] = {long,lat};
+    // console.log(coordinates);
+    // callback({coordinates: coordinates});
+    // console.log("coordinates: ", long, lat);
+  };
 
   //Make GET request to the backend to fetch relevant places from YELP
   searchPlaces = function (options, callback) {
@@ -59,6 +81,6 @@ class SearchBar extends React.Component {
 export default SearchBar;
 
 
-// <h4>What? <input class='text' id='term' type='text' name='term' placeholder='what you want to do...' required/></h4>
-// <h4>Who? <input class='text' id='address' type='text' name='address' placeholder='address...' required/></h4>
-// <input type='submit' value='Add' onClick = {() => this.addAddress(this.props.addresses, this.props.setStates)}/>
+  // <h4>latitude <input class='text' id='lat' type='text' name='latitude' placeholder='latitude' required/></h4>
+  // <h4>longitude <input class='text' id='long' type='text' name='longitude' placeholder='longitude' required/></h4>
+  // <input type='submit' value='Add' onClick = {() => this.addAddress(this.props.coordinates, this.props.setStates)}/>

@@ -41,7 +41,7 @@ class App extends React.Component{
       this.setState({coordinates : data.coordinates});
     }
   }
-
+   
   // showMap(myCoords){
   //   ReactDOM.render(<SimpleMap coordinates = {myCoords}>/, document.getElementById('map'));
   // }
