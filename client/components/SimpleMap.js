@@ -38,8 +38,9 @@ const SimpleMap = React.createClass({
   render() {
     console.log("Inside SimpleMap", this.props.coordinates[0]);
     var lat, long;
-    this.props.coordinates[0]?lat = this.props.coordinates[0].lat:lat = coords.lat;
-    this.props.coordinates[0]?long = this.props.coordinates[0].lng:long = coords.long;
+    var len = this.props.coordinates.length;
+    this.props.coordinates[0]?lat = this.props.coordinates[len-1].lat:lat = coords.lat;
+    this.props.coordinates[0]?long = this.props.coordinates[len-1].lng:long = coords.long;
 
     return (
       <Gmaps

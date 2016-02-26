@@ -38,13 +38,14 @@ class App extends React.Component{
     }
 
     if(data.coordinates){
+      console.log("updating coordinates!");
       this.setState({coordinates : data.coordinates});
     }
   }
-   
-  // showMap(myCoords){
-  //   ReactDOM.render(<SimpleMap coordinates = {myCoords}>/, document.getElementById('map'));
-  // }
+
+  showMap(){
+    console.log(this.state.coordinates);
+  }
 
   render(){
     console.log('rendering from index')
@@ -60,6 +61,3 @@ class App extends React.Component{
 
 //display the generated html on the DOM
 ReactDOM.render(<App />, document.querySelector('.container'));
-
-
-// <input type='button' value='Plot' onClick = {() => this.showMap(this.props.coordinates)}/>

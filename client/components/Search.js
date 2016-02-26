@@ -12,15 +12,12 @@ class SearchBar extends React.Component {
   render() {
     return (
       <div>
-
-
-      <h4>What? <input class='text' id='term' type='text' name='term' placeholder='what you want to do...' required/></h4>
-      <h4>Who? <input class='text' id='address' type='text' name='address' placeholder='address...' required/></h4>
-      <input type='submit' value='Add' onClick = {() => this.addAddress(this.props.coordinates, this.props.setStates)}/>
-
+        <h4>What? <input class='text' id='term' type='text' name='term' placeholder='what you want to do...' required/></h4>
+        <h4>Who? <input class='text' id='address' type='text' name='address' placeholder='address...' required/></h4>
+        <input type='submit' value='Add' onClick = {() => this.addAddress(this.props.coordinates, this.props.setStates)}/>
 
         <br/><br/>
-        <input type='submit' value='Search' onClick = {() => this.searchPlaces(null, this.props.setStates)}/>
+        <input type='button' value='Plot' onClick = {() => this.searchPlaces(this.props.coordinates, this.props.setStates)}/>
         <br/><br/>
       </div>
   )}
@@ -40,7 +37,7 @@ class SearchBar extends React.Component {
       lat = response[0].geometry.location.lat();
       lng = response[0].geometry.location.lng();
       console.log("from geocodes: ",lat,lng);
-      coordinates[0] = {lng,lat};
+      coordinates.push({lng,lat});
       callback({coordinates: coordinates});
     });
 
@@ -57,11 +54,28 @@ class SearchBar extends React.Component {
 
   //Make GET request to the backend to fetch relevant places from YELP
   searchPlaces = function (options, callback) {
-    console.log('Inside search places..');
     var term = $('#term').val();
-    //var address = $('#address').val();
+    console.log("You want to do this ",term," with these people: ",options);
 
-    searchYelp(term, lat, long, function(data){
+    //Find midpoint of given locations
+    var bounds = new google.maps.LatLngBounds();
+    var polygonCoords = [];
+    for(var i = 0; i < options.length; i++){
+      polygonCoords.push(new google.maps.LatLng(options[i].lat,options[i].lng));
+    }
+    console.log(polygonCoords);
+    for (i = 0; i < polygonCoords.length; i++) {
+      bounds.extend(polygonCoords[i]);
+    }
+    var latlng = bounds.getCenter();
+    console.log("lat: ",latlng.lat());
+    console.log("long: ",latlng.lng());
+
+    var midLat = latlng.lat();
+    var midLng = latlng.lng();
+    //Enter midpoint into Yelp and return list of venues
+
+    searchYelp(term, midLat, midLng, function(data){
       console.log("data: ",data);
       callback({placesList: data.businesses});
     })();
